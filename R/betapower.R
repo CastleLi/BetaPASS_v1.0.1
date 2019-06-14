@@ -57,7 +57,7 @@ betapwr.PAR <- function(mu0,sd0,mu1,sampsize,N,seed,link.type="logit",equal.prec
   
   #Define output matrix outtest
   outtest <- rep(NA,N)
-  if(max(sim[,3]) == 1 | min(sim[,3]) == 0){
+  if(max(sim[,3]) > (1-1e-16) | min(sim[,3]) < 1e-16){
     sim[,3] <- (sim[,3] * (sampsize - 1) + 0.5) / sampsize
   }
   for(i in 1:N){

@@ -85,7 +85,7 @@ betapwr2 <- function(mu0,sd0,mu1,sampsize,trials,seed,link.type,equal.precision,
 sample.size.mid <- function(mu0,sd0,mu1,power.min,sig.level,trials,delta,seed,link.type,equal.precision,sd1){
   sample.size.starting <- round(do.call("power.t.test",list(delta = (mu1-mu0), sd = sd0, sig.level = sig.level,power = power.min))$n,0)
   if(is.null(delta)){
-    delta <- max(floor(sample.size.starting/10),1)
+    delta <- 1
   }
   delta.current <- max(floor(sample.size.starting/2),delta)
   power.starting <- betapwr2(mu0,sd0,mu1,sample.size.starting,trials,seed,link.type,equal.precision,sd1,sig.level)
@@ -220,7 +220,7 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 
 samplesize <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, 
                         power.start, power.end, power.by, 
-                        sig.level=0.05, trials=100, delta=NULL, seed=1, 
+                        sig.level=0.05, trials=100, delta=1, seed=1, 
                         link.type="logit", equal.precision=TRUE, sd1=NULL){
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog","wilcoxon")

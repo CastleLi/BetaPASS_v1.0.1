@@ -231,7 +231,7 @@ samplesize <- function(mu0, sd0, mu1.start, mu1.end, mu1.by,
                                        mu1.start = mu1.start, mu1.end = mu1.end, mu1.by = mu1.by,
                                        power.start = power.start, power.end = power.end, power.by = power.by,
                                        sig.level = sig.level, trials = trials, delta = delta, seed = seed,
-                                       link.type = link.type, sample.size.matrix = Power.matrix,equal.precision=equal.precision,sd1=equal.precision))
+                                       link.type = link.type, sample.size.matrix = Power.matrix,equal.precision=equal.precision,sd1=sd1))
   Power.matrix <- cbind(Power.matrix,rep(mu0,nrow(Power.matrix)),rep(sd0,nrow(Power.matrix)))
   Power.names <- rep(NA,2*length(link.type))
   for(i in 1:length(link.type)){

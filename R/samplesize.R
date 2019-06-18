@@ -225,6 +225,14 @@ samplesize <- function(mu0, sd0, mu1.start, mu1.end, mu1.by,
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog","wilcoxon")
   }
+    if(is.null(mu1.end) & is.null(mu1.by)){
+    mu1.end <- mu1.start
+    mu1.by <- 0
+  }
+  if(is.null(power.end) & is.null(power.by)){
+    power.end <- power.start
+    power.by <- 0
+  }
   Power.matrix <- matrix(nrow=(length(seq(power.start,power.end,power.by))*length(seq(mu1.start,mu1.end,mu1.by))),ncol=(2*length(link.type)+2),NA)
   Power.matrix <- data.frame(Power.matrix)
   Power.matrix <- do.call("doit2",list(mu0 = mu0, sd0 = sd0, 

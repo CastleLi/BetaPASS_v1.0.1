@@ -225,13 +225,21 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
 #' betapower(0.56,0.255,.60,.75,.05,30,50, 5,100,617201501,"all")
 #' betapower(0.56,0.255,.70,.75,.05,30,50, 20,40,610201501,c("logit","loglog","log"))
 #' @export
-betapower <-function(mu0, sd0, mu1.start, mu1.end, mu1.by, 
-                     ss.start, ss.end, ss.by, 
+betapower <-function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
+                     ss.start, ss.end = NULL, ss.by = NULL, 
                      trials = 100, seed = 1, link.type="logit", 
                      equal.precision=TRUE, sd1 = NULL){
   #Simulate data from beta with a mean of mu0 and mu1
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog")
+  }
+  if(is.null(mu1.end) & is.null(mu1.by)){
+    mu1.end <- mu1.start
+    mu1.by <- 0
+  }
+  if(is.null(ss.end) & is.null(ss.by)){
+    ss.end <- ss.start
+    ss.by <- 0
   }
   Power.matrix <- matrix(nrow=(length(seq(ss.start,ss.end,ss.by))*length(seq(mu1.start,mu1.end,mu1.by))),ncol=(length(link.type)+3),NA)
   Power.matrix <- data.frame(Power.matrix)

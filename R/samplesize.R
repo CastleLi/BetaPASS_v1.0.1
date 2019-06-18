@@ -218,8 +218,8 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 #' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = "all")
 #' @export
 
-samplesize <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, 
-                        power.start, power.end, power.by, 
+samplesize <- function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
+                        power.start, power.end = NULL, power.by = NULL, 
                         sig.level=0.05, trials=100, delta=1, seed=1, 
                         link.type="logit", equal.precision=TRUE, sd1=NULL){
   if(link.type[1]=="all"){

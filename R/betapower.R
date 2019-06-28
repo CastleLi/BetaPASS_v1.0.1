@@ -159,9 +159,9 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
   
   #Define total # of loops
   Tmp.loc <- 1
+  seed.start <- seed
   for (sampsize in seq(ss.start,ss.end,ss.by)) {
     mu1 <- mu1.start
-    seed.start <- seed
     for(i in 1:loops){
       while(Tmp.loc>=N.total[N.current]){
         print(noquote(paste0((N.current-1)*(100/N.parts),"% completed")))

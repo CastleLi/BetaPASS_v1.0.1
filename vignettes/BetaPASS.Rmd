@@ -80,7 +80,7 @@ library(BetaPASS)
 Power.mat <- betapower(mu0 = 0.56, sd0 = 0.255,
                        mu1.start = .60, mu1.end = .75, mu1.by = .05,
                        ss.start = 30, ss.end = 50, ss.by = 5,
-                       trials = 500, seed = 617201501, 
+                       trials = 500, seed = 1, 
                        link.type = c("logit","loglog","log"))
 ```
 
@@ -103,10 +103,8 @@ It appears that the parametric test does better(a savings of about 10% in sample
 Also you can calculate the minimum sample size directly with given power and alternative using following codes:
 
 ```{r}
-samplesize(mu0=0.56, sd0=0.255, 
-                       mu1.start = 0.65, mu1.end = 0.65, mu1.by = 0, 
-                       power.start = 0.8, power.end = 0.8, power.by = 0, 
-                       trials=200, seed=617201501, link.type = c("logit","loglog","wilcoxon"))
+samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.65, power.start = 0.8, 
+           link.type = c("logit","loglog","wilcoxon"))
 ```
 
 If you want to compare the minimum sample sizes with different powers and alternatives, or different types of link, you can use following codes:
@@ -114,7 +112,7 @@ If you want to compare the minimum sample sizes with different powers and altern
 SS.mat <- samplesize(mu0=0.56, sd0=0.255, 
                        mu1.start = 0.65, mu1.end = 0.75, mu1.by = 0.05, 
                        power.start = 0.7, power.end = 0.9, power.by = 0.1, 
-                       trials=200, seed=617201501, link.type = c("logit","loglog","wilcoxon"))
+                       link.type = c("logit","loglog","wilcoxon"))
 ```
 
 The output will give the estimated sample size for each target power and alternative mean combination.

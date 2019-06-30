@@ -4,8 +4,9 @@
 \alias{betapower}
 \title{Find Power with Beta distribution}
 \usage{
-betapower(mu0, sd0, mu1.start, mu1.end, mu1.by, ss.start, ss.end, ss.by, 
-trials = 100, seed = 1, link.type = "logit", equal.precision = TRUE, sd1 = NULL)
+betapower(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
+ss.start, ss.end = NULL, ss.by = NULL, trials = 100, seed = 1, 
+link.type = "logit", equal.precision = TRUE, sd1 = NULL)
 }
 \arguments{
 \item{mu0}{the mean for the control group}

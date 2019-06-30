@@ -4,9 +4,10 @@
 \alias{samplesize}
 \title{Find minimum sample size with Beta distribution}
 \usage{
-samplesize(mu0, sd0, mu1.start, mu1.end, mu1.by, power.start, power.end, power.by,
-sig.level = 0.05, trials = 100, delta = NuLL, seed = 1, 
-link.type = "logit", equal.precision = TRUE, sd1 = NULL)
+samplesize(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
+power.start, power.end = NULL, power.by = NULL, sig.level = 0.05, 
+trials = 100, delta = NuLL, seed = 1, link.type = "logit", 
+equal.precision = TRUE, sd1 = NULL)
 }
 \arguments{
 \item{mu0}{the mean for the control group}
@@ -40,7 +41,7 @@ link.type = "logit", equal.precision = TRUE, sd1 = NULL)
 \item{sd1}{the standard deviation for the treatment group. Only applicable when equal.precision = FALSE}
 }
 \value{
-Return a matrix including minimum sample size and power, as well as the target power and mu1:
+Return a table including minimum sample size and power, as well as the target power and mu1:
 \item{minimum sample size: link type:}{minimum sample size for given given mu0, sd0, mu1, target power and type of link.}
 \item{minimum power: link type:}{the minimum power greater than or equal to target power.}
 \item{target power:}{the target power.}
@@ -55,7 +56,7 @@ Find minimum sample sizes with Beta distribution and given mu0,sd0,mu1 and targe
 The samplesize function allows you to control the number of trials in the simulation, 
 the target power, delta, and the alternative means.
 You can fix the alternative and vary power to match a desired sample size; 
-Use default values for the number of trials and delta for a quick view;
+Use default values for the number of trials for a quick view;
 Use a larger number of trials (say 1000) and a smaller delta (say 1) to get better estimates.
 }
 \examples{

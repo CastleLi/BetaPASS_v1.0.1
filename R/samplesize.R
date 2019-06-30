@@ -230,12 +230,20 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 #' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = "all")
 #' @export
 
-samplesize <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, 
-                        power.start, power.end, power.by, 
+samplesize <- function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL,
+                        power.start, power.end = NULL, power.by = NULL, 
                         sig.level=0.05, trials=100, delta=1, seed=1, 
                         link.type="logit", equal.precision=TRUE, sd1=NULL){
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog","wilcoxon")
+  }
+  if(is.null(mu1.end) & is.null(mu1.by)){
+    mu1.end <- mu1.start
+    mu1.by <- 0
+  }
+  if(is.null(power.end) & is.null(power.by)){
+    power.end <- power.start
+    power.by <- 0
   }
   Power.matrix <- matrix(nrow=(length(seq(power.start,power.end,power.by))*length(seq(mu1.start,mu1.end,mu1.by))),ncol=(2*length(link.type)+2),NA)
   Power.matrix <- data.frame(Power.matrix)

@@ -215,8 +215,9 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
 #' You can vary both;
 #' Start with a small number of trials (say 100) to determine the rough range of sample sizes or alternatives;
 #' Use a larger number of trials (say 1000) to get better estimates.
-#' @usage betapower(mu0, sd0, mu1.start, mu1.end, mu1.by, ss.start, ss.end, ss.by, 
-#' trials = 100, seed = 1, link.type = "logit", equal.precision = TRUE, sd1 = NULL)
+#' @usage betapower(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
+#' ss.start, ss.end = NULL, ss.by = NULL, trials = 100, seed = 1, 
+#' link.type = "logit", equal.precision = TRUE, sd1 = NULL)
 #' @param mu0 the mean for the control group
 #' @param sd0 the standard deviation for the control group
 #' @param mu1.start the starting value of mean for the treatment group under the alternative mu1

@@ -1,4 +1,4 @@
-betapwr.PAR <- function(mu0,sd0,mu1,sampsize,N,seed,link.type="logit",equal.precision=TRUE,sd1=NULL){
+betapwr.PAR.base <- function(mu0,sd0,mu1,sampsize,N,seed,link.type,equal.precision,sd1){
   #Set seed
   set.seed(seed)
   
@@ -71,7 +71,17 @@ betapwr.PAR <- function(mu0,sd0,mu1,sampsize,N,seed,link.type="logit",equal.prec
   return(power)
 }
 
-betapwr.NPAR <- function(mu0,sd0,mu1,sampsize,N,seed,equal.precision=TRUE,sd1=NULL){
+betapwr.PAR <- function(mu0,sd0,mu1,sampsize,N,seed,link.type,equal.precision,sd1){
+  seed.new <- seed
+  Power <- tryCatch(betapwr.PAR.base(mu0,sd0,mu1,sampsize,N,seed.new,link.type,equal.precision,sd1),error=function(e){return(NA)})
+  while(is.na(Power[1])){
+    seed.new <- seed.new + 1
+    Power <- tryCatch(betapwr.PAR.base(mu0,sd0,mu1,sampsize,N,seed.new,link.type,equal.precision,sd1),error=function(e){return(NA)})
+  }
+  return(Power)
+}
+
+betapwr.NPAR.base <- function(mu0,sd0,mu1,sampsize,N,seed,equal.precision,sd1){
   #Set seed
   set.seed(seed)
   
@@ -143,7 +153,15 @@ betapwr.NPAR <- function(mu0,sd0,mu1,sampsize,N,seed,equal.precision=TRUE,sd1=NU
   return(power)
 }
 
-
+betapwr.NPAR <- function(mu0,sd0,mu1,sampsize,N,seed,link.type,equal.precision,sd1){
+  seed.new <- seed
+  Power <- tryCatch(betapwr.NPAR.base(mu0,sd0,mu1,sampsize,N,seed.new,equal.precision,sd1),error=function(e){return(NA)})
+  while(is.na(Power[1])){
+    seed.new <- seed.new + 1
+    Power <- tryCatch(betapwr.NPAR.base(mu0,sd0,mu1,sampsize,N,seed.new,equal.precision,sd1),error=function(e){return(NA)})
+  }
+  return(Power)
+}
 
 doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.by, trials,seed,Power.matrix,link.type,equal.precision){
   loops <- length(seq(mu1.start,mu1.end,mu1.by))
@@ -159,9 +177,9 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
   
   #Define total # of loops
   Tmp.loc <- 1
-  seed.start <- seed
   for (sampsize in seq(ss.start,ss.end,ss.by)) {
     mu1 <- mu1.start
+    seed.start <- seed
     for(i in 1:loops){
       while(Tmp.loc>=N.total[N.current]){
         print(noquote(paste0((N.current-1)*(100/N.parts),"% completed")))
@@ -225,6 +243,7 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
 #' betapower(0.56,0.255,.60,.75,.05,30,50, 5,100,617201501,"all")
 #' betapower(0.56,0.255,.70,.75,.05,30,50, 20,40,610201501,c("logit","loglog","log"))
 #' @export
+
 betapower <-function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
                      ss.start, ss.end = NULL, ss.by = NULL, 
                      trials = 100, seed = 1, link.type="logit", 

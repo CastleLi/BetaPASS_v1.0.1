@@ -1,4 +1,4 @@
-betapwr2 <- function(mu0,sd0,mu1,sampsize,trials,seed,link.type,equal.precision,sd1,sig.level){
+betapwr2.base <- function(mu0,sd0,mu1,sampsize,trials,seed,link.type,equal.precision,sd1,sig.level){
   #Set seed
   set.seed(seed)
   
@@ -82,6 +82,16 @@ betapwr2 <- function(mu0,sd0,mu1,sampsize,trials,seed,link.type,equal.precision,
   return(Power)
 }
 
+betapwr2 <- function(mu0,sd0,mu1,sampsize,trials,seed,link.type,equal.precision,sd1,sig.level){
+  seed.new <- seed
+  Power <- tryCatch(betapwr2.base(mu0,sd0,mu1,sampsize,trials,seed.new,link.type,equal.precision,sd1,sig.level),error=function(e){return(NA)})
+  while(is.na(Power[1])){
+    seed.new <- seed.new + 1
+    Power <- tryCatch(betapwr2.base(mu0,sd0,mu1,sampsize,trials,seed.new,link.type,equal.precision,sd1,sig.level),error=function(e){return(NA)})
+  }
+  return(Power)
+}
+
 sample.size.mid <- function(mu0,sd0,mu1,power.min,sig.level,trials,delta,seed,link.type,equal.precision,sd1){
   sample.size.starting <- round(do.call("power.t.test",list(delta = (mu1-mu0), sd = sd0, sig.level = sig.level,power = power.min))$n,0)
   if(is.null(delta)){
@@ -155,6 +165,7 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
   }
   
   Tmp.loc <- 1
+  seed.start <- seed
   for (power.target in seq(power.start,power.end,power.by)) {
     mu1 <- mu1.start
     sample.size.unit <- matrix(NA, nrow = 2, ncol = length(link.type))
@@ -166,12 +177,13 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
       for(j in 1:length(link.type)){
         sample.size.unit[,j] <- as.numeric(do.call("sample.size.mid",list(mu0 = mu0, sd0 = sd0, mu1 = mu1, 
                                                                           power.min = power.target,sig.level = sig.level,
-                                                                          trials = trials,delta = delta,seed = seed,
+                                                                          trials = trials,delta = delta,seed = seed.start,
                                                                           link.type = link.type[j],equal.precision=equal.precision,sd1=sd1)))
       }
       sample.size.matrix[Tmp.loc,] <- c(as.numeric(sample.size.unit),power.target,mu1)
       mu1 <- mu1+ mu1.by
       Tmp.loc <- Tmp.loc+1
+      seed.start <- seed.start + 1
     }
   }
   return(sample.size.matrix)
@@ -182,7 +194,7 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 #' @details The samplesize function allows you to control the number of trials in the simulation, 
 #' the target power, delta, and the alternative means.
 #' You can fix the alternative and vary power to match a desired sample size; 
-#' Use default values for the number of trials and delta for a quick view;
+#' Use default values for the number of trials for a quick view;
 #' Use a larger number of trials (say 1000) and a smaller delta (say 1) to get better estimates.
 #' @usage samplesize(mu0, sd0, mu1.start, mu1.end, mu1.by, power.start, power.end, power.by,
 #' sig.level = 0.05, trials = 100, delta = NuLL, seed = 1, 
@@ -202,7 +214,7 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 #' @param link.type default link is "logit". Other link options include: "logit", "probit", "cloglog", "log", "loglog", "wilcoxon", or you can use "all" for all types of link
 #' @param equal.precision equal dispersion parameter assumption in simulation
 #' @param sd1 the standard deviation for the treatment group. Only applicable when equal.precision = FALSE
-#' @return Return a matrix including minimum sample size and power, as well as the target power and mu1:
+#' @return Return a table including minimum sample size and power, as well as the target power and mu1:
 #' \item{minimum sample size: link type:}{minimum sample size for given given mu0, sd0, mu1, target power and type of link.}
 #' \item{minimum power: link type:}{the minimum power greater than or equal to target power.}
 #' \item{target power:}{the target power.}
@@ -218,20 +230,12 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 #' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = "all")
 #' @export
 
-samplesize <- function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
-                        power.start, power.end = NULL, power.by = NULL, 
+samplesize <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, 
+                        power.start, power.end, power.by, 
                         sig.level=0.05, trials=100, delta=1, seed=1, 
                         link.type="logit", equal.precision=TRUE, sd1=NULL){
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog","wilcoxon")
-  }
-    if(is.null(mu1.end) & is.null(mu1.by)){
-    mu1.end <- mu1.start
-    mu1.by <- 0
-  }
-  if(is.null(power.end) & is.null(power.by)){
-    power.end <- power.start
-    power.by <- 0
   }
   Power.matrix <- matrix(nrow=(length(seq(power.start,power.end,power.by))*length(seq(mu1.start,mu1.end,mu1.by))),ncol=(2*length(link.type)+2),NA)
   Power.matrix <- data.frame(Power.matrix)

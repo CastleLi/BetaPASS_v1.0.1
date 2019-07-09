@@ -25,6 +25,8 @@ link.type = "logit", equal.precision = TRUE, sd1 = NULL)
 
 \item{ss.by}{the step length of sample size}
 
+\item{sig.level}{significant level; default value is 0.05}
+
 \item{trials}{the number of trials}
 
 \item{seed}{the seed used in the simulation}
@@ -58,7 +60,9 @@ Start with a small number of trials (say 100) to determine the rough range of sa
 Use a larger number of trials (say 1000) to get better estimates.
 }
 \examples{
-betapower(0.56,0.255,.70,.75,.05,30,50, 20,40,610201501)
-betapower(0.56,0.255,.60,.75,.05,30,50, 5,100,617201501,"all")
-betapower(0.56,0.255,.70,.75,.05,30,50, 20,40,610201501,c("logit","loglog","log"))
+betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
+ss.start = 30, ss.end = 50, ss.by = 20, trials = 40)
+betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, ss.start = 50, link.type = "all")
+betapower(0.56, 0.255, .70, ss.start = 30, ss.end = 50, ss.by = 20,trials = 40, 
+link.type = c("logit","loglog","log"))
 }

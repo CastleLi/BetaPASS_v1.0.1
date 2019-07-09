@@ -32,11 +32,13 @@ Each plot compares power calculated with different link types and the Wilcoxon R
 Y-axis denotes power and X-axis denotes sample size.\cr
 }
 \examples{
-BPmat <- betapower(0.56,0.255,.70,.75,.05,30,50, 20,40,610201501,"all")
+BPmat <- betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
+ss.start = 30, ss.end = 50, ss.by = 20, trials = 40, link.type = "all")
 plot.betapower(BPmat,link.type = "all",by="linktype")
 plot.betapower(BPmat,link.type = "all",by="samplesize")
 plot.betapower(BPmat,link.type = "all",by="mu1")
-BPmat2 <- betapower(0.56,0.255,.61,.76,.05,30,45,5,200,610201511,c("logit","loglog","log"))
+BPmat2 <- betapower(mu0 = 0.56, sd0 = 0.255, mu1.start =.61, mu1.end = .76, mu1.by =.05,
+ss.start = 30, ss.end = 45, ss.by = 5,trials = 200,link.type = c("logit","loglog","log"))
 plot.betapower(BPmat2,link.type = c("logit","loglog","log"),by="linktype")
 plot.betapower(BPmat2,link.type = c("logit","loglog","log"),by="samplesize")
 plot.betapower(BPmat2,link.type = c("logit","loglog","log"),by="mu1")

@@ -1,7 +1,6 @@
-betapwr.PAR.base <- function(mu0,sd0,mu1,sampsize,N,seed,link.type,equal.precision,sd1){
+betapwr.PAR.base <- function(mu0, sd0, mu1, sampsize, N, seed, link.type, equal.precision, sd1, sig.level){
   #Set seed
   set.seed(seed)
-  
   #Set parameters
   if(equal.precision == TRUE){
     phi<- ((mu0*(1-mu0))/(sd0*sd0))-1
@@ -66,22 +65,22 @@ betapwr.PAR.base <- function(mu0,sd0,mu1,sampsize,N,seed,link.type,equal.precisi
     out <- suppressWarnings(lmtest::waldtest(fit1,test = "F"))
     outtest[i] <- as.numeric(out$`Pr(>F)`[2])
   }
-  power <- mean(outtest<0.05)
+  power <- mean(outtest<sig.level)
   
   return(power)
 }
 
-betapwr.PAR <- function(mu0,sd0,mu1,sampsize,N,seed,link.type,equal.precision,sd1){
+betapwr.PAR <- function(mu0, sd0, mu1, sampsize, N, seed, link.type, equal.precision, sd1, sig.level){
   seed.new <- seed
-  Power <- tryCatch(betapwr.PAR.base(mu0,sd0,mu1,sampsize,N,seed.new,link.type,equal.precision,sd1),error=function(e){return(NA)})
+  Power <- tryCatch(do.call("betapwr.PAR.base", list(mu0, sd0, mu1, sampsize, N, seed.new, link.type, equal.precision, sd1, sig.level)),error=function(e){return(NA)})
   while(is.na(Power[1])){
     seed.new <- seed.new + 1
-    Power <- tryCatch(betapwr.PAR.base(mu0,sd0,mu1,sampsize,N,seed.new,link.type,equal.precision,sd1),error=function(e){return(NA)})
+    Power <- tryCatch(do.call("betapwr.PAR.base", list(mu0, sd0, mu1, sampsize, N, seed.new, link.type, equal.precision, sd1, sig.level)),error=function(e){return(NA)})
   }
   return(Power)
 }
 
-betapwr.NPAR.base <- function(mu0,sd0,mu1,sampsize,N,seed,equal.precision,sd1){
+betapwr.NPAR.base <- function(mu0, sd0, mu1, sampsize, N, seed, equal.precision, sd1, sig.level){
   #Set seed
   set.seed(seed)
   
@@ -148,24 +147,24 @@ betapwr.NPAR.base <- function(mu0,sd0,mu1,sampsize,N,seed,equal.precision,sd1){
     out.wil <- wilcox.test(sub.sim[which(sub.sim[,4]==0),3],sub.sim[which(sub.sim[,4]==1),3])
     outtest[i] <- as.numeric(out.wil$p.value)
   }
-  power <- mean(outtest<0.05)
+  power <- mean(outtest<sig.level)
   
   return(power)
 }
 
-betapwr.NPAR <- function(mu0,sd0,mu1,sampsize,N,seed,link.type,equal.precision,sd1){
+betapwr.NPAR <- function(mu0, sd0, mu1, sampsize, N, seed, link.type, equal.precision, sd1, sig.level){
   seed.new <- seed
-  Power <- tryCatch(betapwr.NPAR.base(mu0,sd0,mu1,sampsize,N,seed.new,equal.precision,sd1),error=function(e){return(NA)})
+  Power <- tryCatch(do.call("betapwr.NPAR.base",list(mu0, sd0, mu1, sampsize, N, seed.new, equal.precision, sd1, sig.level)),error=function(e){return(NA)})
   while(is.na(Power[1])){
     seed.new <- seed.new + 1
-    Power <- tryCatch(betapwr.NPAR.base(mu0,sd0,mu1,sampsize,N,seed.new,equal.precision,sd1),error=function(e){return(NA)})
+    Power <- tryCatch(do.call("betapwr.NPAR.base",list(mu0, sd0, mu1, sampsize, N, seed.new, equal.precision, sd1, sig.level)),error=function(e){return(NA)})
   }
   return(Power)
 }
 
-doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.by, trials,seed,Power.matrix,link.type,equal.precision){
+doit <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.by, trials, seed, Power.matrix, link.type, equal.precision, sig.level){
+  # prepare the processing bar
   loops <- length(seq(mu1.start,mu1.end,mu1.by))
-
   N.parts <- 5*((nrow(Power.matrix)>10)+1)
   N.total <- c(as.numeric(quantile(1:nrow(Power.matrix),(1:N.parts)/(5*((nrow(Power.matrix)>10)+1)))),nrow(Power.matrix)+1)
   if(nrow(Power.matrix)==1){
@@ -175,7 +174,7 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
     N.current <- 2
   }
   
-  #Define total # of loops
+  # define total # of loops
   Tmp.loc <- 1
   for (sampsize in seq(ss.start,ss.end,ss.by)) {
     mu1 <- mu1.start
@@ -189,13 +188,13 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
       #Plug in initials into defined function's variables
       Power.PAR <- rep(NA,length(link.type))
       for(j in 1:length(link.type)){
-        Power.PAR[j] <- do.call("betapwr.PAR",list(mu0 = mu0, sd0 = sd0, mu1 = mu1,
-                                                   sampsize = sampsize, N = trials,
-                                                   seed = seed.start, link.type = link.type[j],equal.precision = equal.precision, sd1 = sd1))
+        Power.PAR[j] <- do.call("betapwr.PAR",list(mu0 = mu0, sd0 = sd0, mu1 = mu1,sampsize = sampsize, 
+                                                   N = trials, seed = seed.start, link.type = link.type[j],
+                                                   equal.precision = equal.precision, sd1 = sd1, sig.level = sig.level))
       }
-      Power.NPAR <- do.call("betapwr.NPAR",list(mu0 = mu0, sd0 = sd0, mu1 = mu1,
-                                                sampsize = sampsize, N = trials,
-                                                seed = seed.start, equal.precision = equal.precision, sd1 = sd1))
+      Power.NPAR <- do.call("betapwr.NPAR",list(mu0 = mu0, sd0 = sd0, mu1 = mu1,sampsize = sampsize, 
+                                                N = trials, seed = seed.start, equal.precision = equal.precision, 
+                                                sd1 = sd1, sig.level = sig.level))
       Power.matrix[Tmp.loc,] <- c(Power.PAR,Power.NPAR,sampsize,mu1)
       mu1 <- mu1+ mu1.by
       Tmp.loc <- Tmp.loc+1
@@ -226,6 +225,7 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
 #' @param ss.start the starting value of sample size
 #' @param ss.end the ending value of sample size
 #' @param ss.by the step length of sample size
+#' @param sig.level significant level; default value is 0.05
 #' @param trials the number of trials
 #' @param seed the seed used in the simulation
 #' @param link.type the type of link used in the beta regression. Default value is "logit", or you can use "all" or choose one or more of the following: "logit", "probit", "cloglog", "cauchit", "log", "loglog"
@@ -240,37 +240,48 @@ doit <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.b
 #' \item{sd0}{the standard deviation for the control group.}
 #' \item{trials}{the number of trials.}
 #' @examples 
-#' betapower(0.56,0.255,.70,.75,.05,30,50, 20,40,610201501)
-#' betapower(0.56,0.255,.60,.75,.05,30,50, 5,100,617201501,"all")
-#' betapower(0.56,0.255,.70,.75,.05,30,50, 20,40,610201501,c("logit","loglog","log"))
+#' betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
+#' ss.start = 30, ss.end = 50, ss.by = 20, trials = 40)
+#' betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, ss.start = 50, link.type = "all")
+#' betapower(0.56, 0.255, .70, ss.start = 30, ss.end = 50, ss.by = 20,trials = 40, 
+#' link.type = c("logit","loglog","log"))
 #' @export
 
 betapower <-function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
-                     ss.start, ss.end = NULL, ss.by = NULL, 
+                     ss.start, ss.end = NULL, ss.by = NULL, sig.level = 0.05,
                      trials = 100, seed = 1, link.type="logit", 
                      equal.precision=TRUE, sd1 = NULL){
-  #Simulate data from beta with a mean of mu0 and mu1
+  # define link.type = "all"
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog")
   }
+  # if mu1.end & mu1.by = NULL, set mu1.end as mu1.start
   if(is.null(mu1.end) & is.null(mu1.by)){
     mu1.end <- mu1.start
     mu1.by <- 0
   }
+  # if ss.end & ss.by = NULL, set ss.end as ss.start
   if(is.null(ss.end) & is.null(ss.by)){
     ss.end <- ss.start
     ss.by <- 0
   }
+  # initialize power table
   Power.matrix <- matrix(nrow=(length(seq(ss.start,ss.end,ss.by))*length(seq(mu1.start,mu1.end,mu1.by))),ncol=(length(link.type)+3),NA)
   Power.matrix <- data.frame(Power.matrix)
-  Power.matrix <- doit(mu0,sd0,mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss.by, trials,seed,Power.matrix,link.type, equal.precision)
+  # invoke doit function
+  Power.matrix <- do.call("doit",list(mu0 = mu0, sd0 = sd0, mu1.start = mu1.start, mu1.end = mu1.end, 
+                                      mu1.by = mu1.by, sd1 = sd1, ss.start = ss.start, ss.end = ss.end, 
+                                      ss.by = ss.by, trials = trials, seed = seed, Power.matrix = Power.matrix, 
+                                      link.type = link.type, equal.precision = equal.precision, sig.level = sig.level))
+  # add in parameter values
   Power.matrix <- cbind(Power.matrix,rep(mu0,nrow(Power.matrix)),rep(sd0,nrow(Power.matrix)),rep(trials,nrow(Power.matrix)))
+  # rename the columns of table
   Power.names <- rep(NA,length(link.type))
   for(i in 1:length(link.type)){
     Power.names[i] <- paste("power of GLM:",link.type[i])
   }
   colnames(Power.matrix) <- c(Power.names, "power of Wilcoxon test","sample size","mu1","mu0","sd0","trials")
   Power.matrix <- Power.matrix[order(Power.matrix[,"sample size"]),]
-  
+  # output power table
   return(Power.matrix)
 }

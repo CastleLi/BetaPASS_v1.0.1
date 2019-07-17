@@ -134,36 +134,36 @@ plot.unit3 = function(input.data){
 
 #' @title Plots of Beta power
 #' @description Generate several comparison plots of power.
-#' @usage plot.betapower(betapower.matrix,link.type,by)
+#' @usage plot_betapower(betapower.matrix,link.type,by)
 #' @param betapower.matrix a matrix obtained by the function betapower.(the formula was described as the output formula in the function betapower)
 #' @param link.type the type of link used in the beta regression. You can choose one or more of the following: "logit", "probit", "cloglog", "cauchit", "log", "loglog", "all"
 #' @param by the type of plot. see details.
-#' @details plot.betapower() returns different plots depends on by\cr
-#' by = "linktype": plot.betapower() returns graphs that plot power against mu1, 
+#' @details plot_betapower() returns different plots depends on by\cr
+#' by = "linktype": plot_betapower() returns graphs that plot power against mu1, 
 #' where mu1 is the mean for the treatment group under the alternative. 
 #' The number of plots will vary depending on the number of link types selected with the last plot showing power based on Wilcoxon Rank Sum Test.
 #' The first one or several plots show comparisons of power with different sample size, using GLM method with one or several link types. 
 #' The last plot shows a comparison of the power with different sample size using Wilcoxon Rank Sum Test. 
 #' Y-axis denotes power and X-axis denotes mu1, the mean for the treatment group under the alternative.\cr
-#' by = "samplesize": plot.betapower() returns a number of plots equal to the number of sample sizes tested. 
+#' by = "samplesize": plot_betapower() returns a number of plots equal to the number of sample sizes tested. 
 #' Each plot compares power calculated with different link types and the Wilcoxon Rank Sum Test.
 #' Y-axis denotes power and X-axis denotes mu1, the mean for the treatment group under the alternative.\cr
-#' by = "mu1": plot.betapower() returns a number of plots equal to the number of mu1 used in the procedure. 
+#' by = "mu1": plot_betapower() returns a number of plots equal to the number of mu1 used in the procedure. 
 #' Each plot compares power calculated with different link types and the Wilcoxon Rank Sum Test.
 #' Y-axis denotes power and X-axis denotes sample size.\cr
 #' @examples 
 #' BPmat <- betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
 #' ss.start = 30, ss.end = 50, ss.by = 20, trials = 40, link.type = "all")
-#' plot.betapower(BPmat,link.type = "all",by="linktype")
-#' plot.betapower(BPmat,link.type = "all",by="samplesize")
-#' plot.betapower(BPmat,link.type = "all",by="mu1")
+#' plot_betapower(BPmat,link.type = "all",by="linktype")
+#' plot_betapower(BPmat,link.type = "all",by="samplesize")
+#' plot_betapower(BPmat,link.type = "all",by="mu1")
 #' BPmat2 <- betapower(mu0 = 0.56, sd0 = 0.255, mu1.start =.61, mu1.end = .76, mu1.by =.05,
 #' ss.start = 30, ss.end = 45, ss.by = 5,trials = 200,link.type = c("logit","loglog","log"))
-#' plot.betapower(BPmat2,link.type = c("logit","loglog","log"),by="linktype")
-#' plot.betapower(BPmat2,link.type = c("logit","loglog","log"),by="samplesize")
-#' plot.betapower(BPmat2,link.type = c("logit","loglog","log"),by="mu1")
+#' plot_betapower(BPmat2,link.type = c("logit","loglog","log"),by="linktype")
+#' plot_betapower(BPmat2,link.type = c("logit","loglog","log"),by="samplesize")
+#' plot_betapower(BPmat2,link.type = c("logit","loglog","log"),by="mu1")
 #' @export
-plot.betapower <- function(Tmp.matrix,link.type,by){
+plot_betapower <- function(betapower.matrix,link.type,by){
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog")
   }
@@ -173,12 +173,12 @@ plot.betapower <- function(Tmp.matrix,link.type,by){
   
   name.plot <-  c(paste("power of GLM:",link.type),"power of Wilcoxon test")
   output.name.plot <- c(paste0("Power: GLM (",link.type,")"), "Power: Wilcoxon")
-  input.data <- reshape(Tmp.matrix,varying = name.plot, 
+  input.data <- reshape(betapower.matrix,varying = name.plot, 
                         v.names = "power",
                         timevar = "subj", 
                         times = output.name.plot, 
                         direction = "long",
-                        new.row.names = c(1:(length(name.plot)*nrow(Tmp.matrix))))
+                        new.row.names = c(1:(length(name.plot)*nrow(betapower.matrix))))
   
   if(by == "linktype"){
     plot.unit1(input.data = input.data)

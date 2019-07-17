@@ -45,36 +45,36 @@ plot.unit4 = function(input.data){
 
 #' @title Plots by mu1
 #' @description Generate the comparison plots using GLM method and Wilcoxon Rank Sum Test with different mu1.
-#' @usage plot.samplesize(SS.matrix,link.type)
+#' @usage plot_samplesize(SS.matrix,link.type)
 #' @param SS.matrix the matrix obtained by the function samplesize.(the formula was described as the output formula in the function samplesize)
 #' @param link.type the type of link used in the beta regression(or Wilcoxon Rank Sum Test). You can choose one or more of the following: "logit", "probit", "cloglog", "cauchit", "log", "loglog", "wilcoxon", "all"
-#' @details plot.samplesize() returns a series of plots equal to the number of mu1 used in the procedure.
+#' @details plot_samplesize() returns a series of plots equal to the number of mu1 used in the procedure.
 #' Y-axis denotes minimum sample size and X-axis denotes minimum power.
 #' @examples 
 #' SSmat <- samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.60, mu1.end = 0.70, mu1.by = 0.05, 
 #' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = "all")
-#' plot.samplesize(SSmat, "all")
+#' plot_samplesize(SSmat, "all")
 #' SSmat2 <- samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.60, mu1.end = 0.70, mu1.by = 0.05, 
 #' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = c("logit","loglog","log"))
-#' plot.samplesize(SSmat2,link.type = c("logit","loglog","log"))
+#' plot_samplesize(SSmat2,link.type = c("logit","loglog","log"))
 #' 
 #' @export
-plot.samplesize <- function(Tmp.matrix,link.type){
+plot_samplesize <- function(SS.matrix,link.type){
   if(link.type[1]=="all"){
     link.type <- c("logit", "probit", "cloglog", "log", "loglog")
   }
   name.plot <-  c(paste("minimum sample size:",link.type))
   output.name.plot <- c(paste0("Power: GLM (",link.type,")"))
   #combine minimum sample size
-  input.data <- reshape(Tmp.matrix,varying = name.plot, 
+  input.data <- reshape(SS.matrix,varying = name.plot, 
                         v.names = "SS",
                         timevar = "subj", 
                         times = output.name.plot, 
                         direction = "long",
-                        new.row.names = c(1:(length(name.plot)*nrow(Tmp.matrix))))
+                        new.row.names = c(1:(length(name.plot)*nrow(SS.matrix))))
   #combine minimum power
   Power.loc.row <- c(1:nrow(input.data))
-  Power.loc.col <- rep(c(1:length(link.type)),rep(nrow(Tmp.matrix),length(link.type)))
+  Power.loc.col <- rep(c(1:length(link.type)),rep(nrow(SS.matrix),length(link.type)))
   minimum.power <- rep(NA,nrow(input.data))
   for(i in 1:length(minimum.power)){
     minimum.power[i] <- input.data[Power.loc.row[i],Power.loc.col[i]]

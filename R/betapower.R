@@ -215,8 +215,9 @@ doit <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss
 #' Start with a small number of trials (say 100) to determine the rough range of sample sizes or alternatives;
 #' Use a larger number of trials (say 1000) to get better estimates.
 #' @usage betapower(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
-#' ss.start, ss.end = NULL, ss.by = NULL, trials = 100, seed = 1, 
-#' link.type = "logit", equal.precision = TRUE, sd1 = NULL)
+#' ss.start, ss.end = NULL, ss.by = NULL, sig.level = 0.05,
+#' trials = 100, seed = 1, link.type="logit",
+#' equal.precision=TRUE, sd1 = NULL)
 #' @param mu0 the mean for the control group
 #' @param sd0 the standard deviation for the control group
 #' @param mu1.start the starting value of mean for the treatment group under the alternative mu1
@@ -242,7 +243,6 @@ doit <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss
 #' @examples 
 #' betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
 #' ss.start = 30, ss.end = 50, ss.by = 20, trials = 40)
-#' betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, ss.start = 50, link.type = "all")
 #' betapower(0.56, 0.255, .70, ss.start = 30, ss.end = 50, ss.by = 20,trials = 40, 
 #' link.type = c("logit","loglog","log"))
 #' @export

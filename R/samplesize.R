@@ -198,7 +198,7 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 #' Use a larger number of trials (say 1000) and a smaller delta (say 1) to get better estimates.
 #' @usage samplesize(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
 #' power.start, power.end = NULL, power.by = NULL, sig.level = 0.05, 
-#' trials = 100, delta = NuLL, seed = 1, link.type = "logit", 
+#' trials = 100, delta = 1, seed = 1, link.type = "logit", 
 #' equal.precision = TRUE, sd1 = NULL)
 #' @param mu0 the mean for the control group
 #' @param sd0 the standard deviation for the control group

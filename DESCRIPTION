@@ -1,9 +1,10 @@
 Package: BetaPASS
 Title: Calculate Power and Sample Size with Beta Regression.
-Version: 0.1.0
-Authors@R: person("Jinpu", "Li", email = "lijinp@health.missouri.edu", role = c("aut", "cre"))
-	person("Ryan", "Knigge", email = "rknigge@health.missouri.edu", role = c("aut", "cre"))
-	person("Emily", "Leary", email = "LearyE@health.missouri.edu", role = c("aut", "cre"))
+Version: 1.0-1
+Date: 2019-07-10
+Authors@R: c(person("Jinpu", "Li", email = "lijinp@health.missouri.edu", role = c("aut", "cre")),
+	person("Ryan", "Knigge", email = "rknigge@health.missouri.edu", role = "aut"),
+	person("Emily", "Leary", email = "LearyE@health.missouri.edu", role = "aut"))
 Description: Power calculations are a critical component of any research study to determine the 
 	minimum sample size necessary to detect differences between multiple groups. 
 	Researchers often work with data taking the form of proportions that can be modeled with 
@@ -16,11 +17,7 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.0
-Imports: betareg,
-	lmtest,
-	reshape,
-	ggplot2,
-	Rcpp
+Imports: betareg, lmtest, reshape, ggplot2, Rcpp, stats
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

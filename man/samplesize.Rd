@@ -6,7 +6,7 @@
 \usage{
 samplesize(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 
 power.start, power.end = NULL, power.by = NULL, sig.level = 0.05, 
-trials = 100, delta = NuLL, seed = 1, link.type = "logit", 
+trials = 100, delta = 1, seed = 1, link.type = "logit", 
 equal.precision = TRUE, sd1 = NULL)
 }
 \arguments{

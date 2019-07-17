@@ -62,7 +62,5 @@ Use a larger number of trials (say 1000) to get better estimates.
 }
 \examples{
 betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
-ss.start = 30, ss.end = 50, ss.by = 20, trials = 40)
-betapower(0.56, 0.255, .70, ss.start = 30, ss.end = 50, ss.by = 20,trials = 40, 
-link.type = c("logit","loglog","log"))
+ss.start = 30, ss.end = 50, ss.by = 20, trials = 20)
 }

@@ -152,16 +152,14 @@ plot.unit3 = function(input.data){
 #' Each plot compares power calculated with different link types and the Wilcoxon Rank Sum Test.
 #' Y-axis denotes power and X-axis denotes sample size.\cr
 #' @examples 
-#' BPmat <- betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
-#' ss.start = 30, ss.end = 50, ss.by = 20, trials = 40, link.type = "all")
-#' plot_betapower(BPmat,link.type = "all",by="linktype")
-#' plot_betapower(BPmat,link.type = "all",by="samplesize")
-#' plot_betapower(BPmat,link.type = "all",by="mu1")
-#' BPmat2 <- betapower(mu0 = 0.56, sd0 = 0.255, mu1.start =.61, mu1.end = .76, mu1.by =.05,
-#' ss.start = 30, ss.end = 45, ss.by = 5,trials = 200,link.type = c("logit","loglog","log"))
-#' plot_betapower(BPmat2,link.type = c("logit","loglog","log"),by="linktype")
-#' plot_betapower(BPmat2,link.type = c("logit","loglog","log"),by="samplesize")
-#' plot_betapower(BPmat2,link.type = c("logit","loglog","log"),by="mu1")
+#' ## generate the power table with betapower
+#' BPmat <- betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .80, mu1.by = .10, 
+#' ss.start = 30, ss.end = 50, ss.by = 20, trials = 15, link.type = c("logit","log"))
+#' ## plot by link types
+#' plot_betapower(BPmat,link.type = c("logit","log"),by="linktype")
+#' ## plot by sample size
+#' plot_betapower(BPmat,link.type = c("logit","log"),by="samplesize")
+#' @importFrom stats step reshape
 #' @export
 plot_betapower <- function(betapower.matrix,link.type,by){
   if(link.type[1]=="all"){

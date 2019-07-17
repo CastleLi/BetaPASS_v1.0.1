@@ -1,5 +1,5 @@
 Package: BetaPASS
-Title: Calculate Power and Sample Size with Beta Regression.
+Title: Calculate Power and Sample Size with Beta Regression
 Version: 1.0-1
 Date: 2019-07-10
 Authors@R: c(person("Jinpu", "Li", email = "lijinp@health.missouri.edu", role = c("aut", "cre")),
@@ -12,7 +12,7 @@ Description: Power calculations are a critical component of any research study t
 	that perform power and sample size calculations for data following a beta distribution 
 	with comparative nonparametric output. This package allows flexibility with multiple 
 	options for link functions to fit the data and graphing functionality for visual comparisons.
-Depends: R (>= 3.5.1)
+Depends: R (>= 3.5)
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

@@ -51,13 +51,14 @@ plot.unit4 = function(input.data){
 #' @details plot_samplesize() returns a series of plots equal to the number of mu1 used in the procedure.
 #' Y-axis denotes minimum sample size and X-axis denotes minimum power.
 #' @examples 
-#' SSmat <- samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.60, mu1.end = 0.70, mu1.by = 0.05, 
-#' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = "all")
-#' plot_samplesize(SSmat, "all")
-#' SSmat2 <- samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.60, mu1.end = 0.70, mu1.by = 0.05, 
-#' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = c("logit","loglog","log"))
-#' plot_samplesize(SSmat2,link.type = c("logit","loglog","log"))
-#' 
+#' ## use a greater number of trials, e.g. 1000, to get accurate result
+#' ## generate sample size matrix
+#' SSmat <- samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.75, 
+#' power.start =  0.8, power.end = 0.9, power.by = 0.1, 
+#' trials = 10, link.type = c("log","wilcoxon"))
+#' ## plot with parametric and nonparametric methods
+#' plot_samplesize(SSmat, c("log","wilcoxon"))
+#' @importFrom stats step reshape
 #' @export
 plot_samplesize <- function(SS.matrix,link.type){
   if(link.type[1]=="all"){

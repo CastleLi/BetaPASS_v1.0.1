@@ -223,12 +223,9 @@ doit2 <- function(mu0,sd0,mu1.start, mu1.end, mu1.by, power.start, power.end, po
 #' \item{mu0:}{the mean for the control group.}
 #' \item{sd0:}{the standard deviation for the control group.}
 #' @examples 
-#' samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.65, mu1.end = 0.75, mu1.by = 0.05, 
-#' power.start = 0.7, power.end = 0.9, power.by = 0.1)
-#' samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.65, mu1.end = 0.75, mu1.by = 0.05, 
-#' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = c("logit","loglog","log"))
-#' samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.65, mu1.end = 0.75, mu1.by = 0.05, 
-#' power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = "all")
+#' samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.8, power.start =  0.9, trials = 25,
+#' link.type = c("logit","wilcoxon"))
+#' @importFrom stats rbeta wilcox.test quantile
 #' @export
 
 samplesize <- function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL,

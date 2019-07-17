@@ -242,9 +242,8 @@ doit <- function(mu0, sd0, mu1.start, mu1.end, mu1.by, sd1, ss.start, ss.end, ss
 #' \item{trials}{the number of trials.}
 #' @examples 
 #' betapower(mu0 = 0.56, sd0 = 0.255, mu1.start = .70, mu1.end = .75, mu1.by = .05, 
-#' ss.start = 30, ss.end = 50, ss.by = 20, trials = 40)
-#' betapower(0.56, 0.255, .70, ss.start = 30, ss.end = 50, ss.by = 20,trials = 40, 
-#' link.type = c("logit","loglog","log"))
+#' ss.start = 30, ss.end = 50, ss.by = 20, trials = 20)
+#' @importFrom stats rbeta wilcox.test quantile
 #' @export
 
 betapower <-function(mu0, sd0, mu1.start, mu1.end = NULL, mu1.by = NULL, 

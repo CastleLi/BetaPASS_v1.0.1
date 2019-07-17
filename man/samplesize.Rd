@@ -60,10 +60,6 @@ Use default values for the number of trials for a quick view;
 Use a larger number of trials (say 1000) and a smaller delta (say 1) to get better estimates.
 }
 \examples{
-samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.65, mu1.end = 0.75, mu1.by = 0.05, 
-power.start = 0.7, power.end = 0.9, power.by = 0.1)
-samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.65, mu1.end = 0.75, mu1.by = 0.05, 
-power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = c("logit","loglog","log"))
-samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.65, mu1.end = 0.75, mu1.by = 0.05, 
-power.start = 0.7, power.end = 0.9, power.by = 0.1, link.type = "all")
+samplesize(mu0=0.56, sd0=0.255, mu1.start = 0.8, power.start =  0.9, trials = 25,
+link.type = c("logit","wilcoxon"))
 }
